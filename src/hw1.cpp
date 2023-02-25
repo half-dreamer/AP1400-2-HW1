@@ -9,6 +9,8 @@ using std::fixed;
 using std::logic_error;
 using std::setprecision;
 using std::setw;
+using std::swap;
+using std::transform;
 
 // user-defined functions
 int algebra::rowNum(const Matrix& matrix) 
@@ -190,4 +192,64 @@ Matrix algebra::minor(const Matrix& matrix, size_t n, size_t m)
         ++rowCount;
     }
     return minoredMatrix;
+}
+
+double algebra::determinant(const Matrix &matrix)
+{
+    //validate input matrix 
+    if (colNum(matrix) != rowNum(matrix)) {
+        throw logic_error("input matrix is not a square!");
+    }
+    // corner case
+    if (isEmpty(matrix)) {
+        return 1;
+    }
+    // base case
+    if (colNum(matrix) == 1) {
+        return matrix[0][0];
+    }
+    double determinant = 0;
+    int flag = 1;
+    for (int i = 0; i < colNum(matrix); ++i) {
+        determinant += flag * matrix[0][i] * algebra::determinant(minor(matrix, 0, i));
+        flag = -flag;
+    }
+    return determinant;
+}
+
+Matrix algebra::inverse(const Matrix& matrix)
+{
+    throw "I forget how to calculate the inverse matrix🤡";
+}
+
+Matrix algebra::ero_swap(const Matrix &matrix, size_t r1, size_t r2) 
+{
+    if (r1 > rowNum(matrix) - 1 || r2 > rowNum(matrix) - 1) {
+        throw logic_error("toSwap row number is larger than matrix size!");
+    }
+    Matrix swapedMatrix(matrix);
+    swap(swapedMatrix[r1], swapedMatrix[r2]);
+    return swapedMatrix;
+}
+
+Matrix algebra::ero_multiply(const Matrix &matrix, size_t r, double c)
+{
+    Matrix muledMatrix(matrix);
+    transform(muledMatrix[r].begin(), muledMatrix[r].end(), muledMatrix[r].begin(),
+              std::bind(std::multiplies<double>(), std::placeholders::_1, c));
+    // this unary function can also use [c](auto &a){return a*c;}
+    return muledMatrix;
+}
+
+Matrix algebra::ero_sum(const Matrix &matrix, size_t r1, double c, size_t r2)
+{
+    Matrix sumedMatrix(matrix);
+    transform(sumedMatrix[r1].begin(), sumedMatrix[r1].end(), sumedMatrix[r2].begin(), sumedMatrix[r2].begin(),
+              [c](double ele1, double ele2)
+              { return c * ele1 + ele2;});
+    return sumedMatrix;
+}
+Matrix algebra::upper_triangular(const Matrix& matrix)
+{
+    Matrix step1 = ero_sum(matrix, )
 }

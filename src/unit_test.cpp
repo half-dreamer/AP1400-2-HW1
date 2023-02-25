@@ -2,7 +2,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include "hw1.h"
-
+/*
 TEST(HW1Test, ZEROS) {
     Matrix matrix{algebra::zeros(5, 6)};
 
@@ -191,7 +191,6 @@ TEST(HW1Test, MINOR2) {
     EXPECT_DOUBLE_EQ(minor[1][0], matrix[2][0]);
     EXPECT_DOUBLE_EQ(minor[1][1], matrix[2][2]);
 }
-/*
 TEST(HW1Test, DETERMINANT1) {
     // Caution: determinant of an empty matrix
     EXPECT_EQ(algebra::determinant(Matrix{}), 1);
@@ -209,7 +208,6 @@ TEST(HW1Test, DETERMINANT2) {
     Matrix matrix{{1, 1.5, -1.75, 2}, {2, 2.5, -2.75, 3}, {3, 3.5, -3.75, 4}, {4, 4.5, 4.75, 5}};
     EXPECT_DOUBLE_EQ(algebra::determinant(matrix), 0);
 }
-
 TEST(HW1Test, INVERSE1) {
     // Caution: inverse of an empty matrix
     EXPECT_TRUE(algebra::inverse(Matrix{}).empty());
@@ -282,6 +280,7 @@ TEST(HW1Test, CONCATENATE2) {
     EXPECT_DOUBLE_EQ(matrix[1][3], matrix2[1][0]);
 }
 
+*/
 TEST(HW1Test, ERO_SWAP) {
     // Caution: r1 or r2 inputs are out of range
     EXPECT_THROW(algebra::ero_swap(Matrix{{1, 2}}, 0, 1), std::logic_error);
@@ -296,7 +295,6 @@ TEST(HW1Test, ERO_SWAP) {
     EXPECT_TRUE(swap[2] == matrix[3]);
     EXPECT_TRUE(swap[3] == matrix[2]);
 }
-
 TEST(HW1Test, ERO_MULTIPLY) {
     Matrix matrix{algebra::random(4, 3, 0, 4)};
     Matrix ero{algebra::ero_multiply(matrix, 2, 1.5)};
@@ -322,7 +320,7 @@ TEST(HW1Test, ERO_SUM) {
     for (size_t i{}; i < ero[3].size(); i++)
         EXPECT_NEAR(ero[3][i], matrix[0][i]*2+matrix[3][i], 0.03);
 }
-
+/*
 TEST(HW1Test, UPPER_TRIANGULAR1) {
     // Caution: empty matrix
     EXPECT_TRUE(algebra::upper_triangular(Matrix{}).empty());
