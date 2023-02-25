@@ -6,6 +6,8 @@
 #include <iomanip>
 #include <iostream>
 #include <exception>
+#include <algorithm>
+#include <functional>
 
 using Matrix = std::vector<std::vector<double>>;
 using std::vector;
@@ -28,6 +30,12 @@ namespace algebra
     Matrix ero_multiply(const Matrix &matrix, size_t r, double c);
     Matrix ero_sum(const Matrix &matrix, size_t r1, double c, size_t r2);
     Matrix upper_triangular(const Matrix &matrix);
+    // user defined function
+    int rowNum(const Matrix &matrix);
+    int colNum(const Matrix &matrix);
+    bool isEmpty(const Matrix &matrix);
+    double &element(Matrix &matrix, int row, int col);
+    double dotProduct(const Matrix &matrix1, const Matrix &matrix2, int row, int col);
 }
 
 #endif //AP_HW1_H
