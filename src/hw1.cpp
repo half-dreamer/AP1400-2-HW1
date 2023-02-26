@@ -219,7 +219,30 @@ double algebra::determinant(const Matrix &matrix)
 
 Matrix algebra::inverse(const Matrix& matrix)
 {
-    throw "I forget how to calculate the inverse matrix🤡";
+    return multiply(transpose(matrix), 1 / determinant(matrix));
+}
+
+Matrix algebra::concatenate(const Matrix& matrix1, const Matrix& matrix2, int axis) 
+{
+    Matrix concantMatrix(matrix1);
+    if (axis == 0)
+    {
+        // validate input matrixs
+        if (colNum(matrix1) != colNum(matrix2)) {
+            throw logic_error("colNum of two input matrixs are different when concatenated up and down");
+        }
+        concantMatrix.insert(concantMatrix.end(), matrix2.begin(), matrix2.end());
+    }
+    if (axis == 1) {
+        // validate input matrixs
+        if (rowNum(matrix1) != rowNum(matrix2)) {
+            throw logic_error("rowNum of two input matrixs are different when concatenated alongside");
+        }
+        for (int i = 0; i < rowNum(matrix1); ++i ) {
+            concantMatrix[i].insert(concantMatrix[i].end(), matrix2[i].begin(), matrix2[i].end());
+        }
+    }
+    return concantMatrix;
 }
 
 Matrix algebra::ero_swap(const Matrix &matrix, size_t r1, size_t r2) 
@@ -241,6 +264,17 @@ Matrix algebra::ero_multiply(const Matrix &matrix, size_t r, double c)
     return muledMatrix;
 }
 
+// add r1th * c into r2th column
+Matrix algebra::ero_sum_col(const Matrix & matrix, size_t r1, double c, size_t r2)
+{
+    Matrix sumedMatrix(matrix);
+    int rowNum = algebra::rowNum(sumedMatrix);
+    for (int i = 0; i < rowNum; ++i) {
+        sumedMatrix[i][r2] += c * sumedMatrix[i][r1];
+    }
+    return sumedMatrix;
+}
+
 Matrix algebra::ero_sum(const Matrix &matrix, size_t r1, double c, size_t r2)
 {
     Matrix sumedMatrix(matrix);
@@ -251,5 +285,30 @@ Matrix algebra::ero_sum(const Matrix &matrix, size_t r1, double c, size_t r2)
 }
 Matrix algebra::upper_triangular(const Matrix& matrix)
 {
-    Matrix step1 = ero_sum(matrix, )
+    // validate input matrix
+    if (colNum(matrix) != rowNum(matrix)) {
+        throw logic_error("input matrix is not a square!");
+    }
+    if (isEmpty(matrix)) {
+        return matrix;
+    }
+    // base case 
+    if (colNum(matrix) == 1) {
+        return matrix;
+    }
+    int rowNum = algebra::rowNum(matrix);
+    Matrix upperTriMatrix(matrix);
+    // process ith column
+    for (int i = 0; i < colNum(matrix); ++i) {
+        // j is the row num to iterate 
+        double diagonalEle = upperTriMatrix[i][i];
+        for (int j = i + 1; j < rowNum; ++j)
+        {
+            upperTriMatrix = ero_sum(upperTriMatrix, 
+                                    i, 
+                                    -(upperTriMatrix[j][i] / diagonalEle),
+                                    j);
+        }
+    }
+    return upperTriMatrix;
 }
