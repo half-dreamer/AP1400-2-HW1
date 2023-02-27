@@ -37,6 +37,7 @@ namespace algebra
     double &element(Matrix &matrix, int row, int col);
     double dotProduct(const Matrix &matrix1, const Matrix &matrix2, int row, int col);
     Matrix ero_sum_col(const Matrix &matrix, size_t r1, double c, size_t r2);
+    Matrix adjugate(const Matrix &matrix);
 }
 
 #endif //AP_HW1_H

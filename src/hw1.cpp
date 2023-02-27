@@ -219,7 +219,27 @@ double algebra::determinant(const Matrix &matrix)
 
 Matrix algebra::inverse(const Matrix& matrix)
 {
-    return multiply(transpose(matrix), 1 / determinant(matrix));
+    if (isEmpty(matrix)) {
+        return matrix;
+    }
+    if (colNum(matrix) != rowNum(matrix)) {
+        throw logic_error("non-square matrix can't be inversed!");
+    }
+    if (determinant(matrix) == 0) {
+        throw logic_error("the determinant of input matrix can't be inversed");
+    }
+    return multiply(adjugate(matrix), 1 / determinant(matrix));
+}
+
+Matrix algebra::adjugate(const Matrix& matrix)
+{
+    Matrix adjMatrix(matrix);
+    for (int i = 0; i < rowNum(matrix); ++i) {
+        for (int j = 0; j < colNum(matrix); ++j) {
+            adjMatrix[i][j] = determinant(minor(matrix, i, j));
+        }
+    }
+    return transpose(adjMatrix);
 }
 
 Matrix algebra::concatenate(const Matrix& matrix1, const Matrix& matrix2, int axis) 
